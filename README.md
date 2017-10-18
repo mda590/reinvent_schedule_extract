@@ -12,7 +12,8 @@ I didn't see anything in the re:Invent TOS regarding scraping schedule content. 
 1. In the reinvent.py file, update your event website credentials in the USERNAME and PASSWORD vars. These are the credentials you use when logging in on this page: https://www.portal.reinvent.awsevents.com/connect/login.ww. 
 2. Download the Chrome web driver for your OS (https://sites.google.com/a/chromium.org/chromedriver/downloads).
 3. Change the CHROME_DRIVER var to point to the driver location.
-4. Run the file in Python. Assuming all goes well, you should end up with a sessions.txt, pipe delimited text file with all of the re:Invent sessions, and a column indicating whether you marked it as a session you'd be interesting in attending.
+4. Set the REQ_VERIFY to False if you want to ignore SSL cert errors.
+5. Run the file in Python. Assuming all goes well, you should end up with a sessions.txt, pipe delimited text file with all of the re:Invent sessions, and a column indicating whether you marked it as a session you'd be interesting in attending.
 
 ## Why did I make this?
 A couple of reasons:

@@ -31,6 +31,9 @@ PASSWORD = 'PASSWORD'
 # Chrome web driver path
 CHROME_DRIVER = './chromedriver'
 
+# Set to False to ignore SSL certificate validation in Requests package
+REQ_VERIFY = True
+
 # Initialize headless chrome
 chrome_options = Options()
 chrome_options.add_argument("--headless")
@@ -70,7 +73,7 @@ def get_session_time(session_id):
         "scriptSessionId": "1234567"
     }
     headers = {'Content-Type': 'text/plain'}
-    r = requests.post(url, headers=headers, data=data)
+    r = requests.post(url, headers=headers, data=data, verify=REQ_VERIFY)
     returned = r.content
     returned = returned.replace("\\", '')
 
@@ -111,12 +114,13 @@ for day in DAY_CODES:
 
     # Once all sessions for the day have been loaded by the headless browser,
     # append to a variable for use in BS.
-    content_to_parse = content_to_parse + driver.page_source.encode('utf-8')
+    content_to_parse = content_to_parse + driver.page_source
 
 driver.close()
 
 # Start the process of grabbing out relevant session information and writing to a file
-soup = BeautifulSoup(content_to_parse, "html5lib")
+#soup = BeautifulSoup(content_to_parse, "html5lib")
+soup = BeautifulSoup(content_to_parse, "html.parser")
 
 # In some event titles, there are audio options available inside of an 'i' tag
 # Strip out all 'i' tags to make this easier on BS
@@ -134,7 +138,7 @@ file.write("Session Number|Session Title|Session Interest|Start Time|End Time|Ro
 
 # For each session, pull out the relevant fields and write them to the sessions.txt file.
 for session in sessions:
-    session_soup = BeautifulSoup(str(session), "html5lib")
+    session_soup = BeautifulSoup(str(session), "html.parser")
     session_id = session_soup.find("div", class_="sessionRow")
     session_id = session_id['id']
     session_id = session_id[session_id.find("_")+1:]
@@ -145,6 +149,7 @@ for session in sessions:
 
     session_title = session_soup.find("span", class_="title")
     session_title = session_title.string.encode('utf-8').rstrip()
+    session_title = session_title.decode('utf-8')
 
     session_abstract = session_soup.find("span", class_="abstract")
 
