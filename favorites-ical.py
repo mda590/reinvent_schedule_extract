@@ -89,6 +89,8 @@ cal.add('version', '2.0')
 for session in session_data:
     event = Event()
     event.add('summary', session['title'].replace("'","\'"))
+    event.add('description', session['abstract'])
+    event.add('location', session['schedule']['room'])
     event.add('dtstart', session['schedule']['startDatetime'])
     event.add('dtend', session['schedule']['endDatetime'])
     # event.add('url', session['link'])
