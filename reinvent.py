@@ -20,10 +20,8 @@ from time import sleep
 from bs4 import BeautifulSoup
 import re
 
-# On the re:Invent event site, each day has a numeric code assigned to it
-# This is Sunday, Monday, Tuesday, Wednesday, Thursday, Friday
-DAY_CODES = [130, 170, 31, 110, 111, 112]
-
+#Venetian, Encore, Aria, MGM, Mirage, LINQ
+VENUE_CODES = [22188,728,22191,22190,22583,22584]
 # Set username and password for reinvent event website
 USERNAME = 'USERNAME'
 PASSWORD = 'PASSWORD'
@@ -85,7 +83,8 @@ def get_session_time(session_id):
     time_information = {
         "start_time": start_time.replace('"', ''),
         "end_time": end_time.replace('"', ''),
-        "room": room.replace('"', '')
+        "room": room.replace('"', ''),
+        "day": start_time.replace('"', '')[:start_time.replace('"', '').find(',')]
     }
 
     return time_information
@@ -96,10 +95,11 @@ login(driver, USERNAME, PASSWORD)
 # Getting content by day, instead of the entire set, because sometimes the
 # Get More Results link stops working on the full list. Haven't had issues
 # looking at the lists day by day.
-for day in DAY_CODES:
-    driver.get("https://www.portal.reinvent.awsevents.com/connect/search.ww#loadSearch-searchPhrase=&searchType=session&tc=0&sortBy=daytime&dayID="+str(day))
+for venue in VENUE_CODES:
+    #driver.get("https://www.portal.reinvent.awsevents.com/connect/search.ww#loadSearch-searchPhrase=&searchType=session&tc=0&sortBy=daytime&dayID="+str(day))
+    driver.get("https://www.portal.reinvent.awsevents.com/connect/search.ww#loadSearch-searchPhrase=&searchType=session&tc=0&sortBy=abbreviationSort&p=&i(728)="+str(venue))
     sleep(3)
-    print ("Getting Content for Day Code: " + str(day))
+    print ("Getting Content for Venue Code: " + str(venue))
     more_results = True
     # Click through all of the session results pages for a specific day.
     # The goal is to get the full list for a day loaded.
@@ -116,7 +116,7 @@ for day in DAY_CODES:
     # append to a variable for use in BS.
     content_to_parse = content_to_parse + driver.page_source
 
-driver.close()
+driver.close() 
 
 # Start the process of grabbing out relevant session information and writing to a file
 #soup = BeautifulSoup(content_to_parse, "html5lib")
@@ -143,7 +143,6 @@ for session in sessions:
     session_id = session_id['id']
     session_id = session_id[session_id.find("_")+1:]
     session_timing = get_session_time(session_id)
-    
     session_number = session_soup.find("span", class_="abbreviation")
     session_number = session_number.string.replace(" - ", "")
 
@@ -160,9 +159,9 @@ for session in sessions:
     else:
         session_interest = True
 
-    write_contents = str(session_number) + "|" + session_title + "|" + str(session_interest) + "|" + str(session_timing['start_time']) + "|" + str(session_timing['end_time']) + "|" + str(session_timing['room'])
-    file.write(write_contents + "\n")
+    write_contents = str(session_number) + "|" + session_title + "|" + str(session_interest) + "|" + str(session_timing['start_time']) + "|" + str(session_timing['end_time']) + "|" + str(session_timing['room'] + "|" + str(session_timing['day']))
+    file.write(write_contents.encode('utf-8').strip() + "\n")
     # Print the session title for each session written to the file
-    print (session_title)
+    print (session_title.encode('utf-8').strip())
 
 file.close()
