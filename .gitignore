@@ -1,2 +1,4 @@
 chromedriver*
 sessions.txt
+sessions.csv
+*.txt

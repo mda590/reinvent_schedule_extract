@@ -1,4 +1,9 @@
-# AWS re:Invent 2017 Schedule Extract Tool
+# AWS re:Invent 2018 Schedule Extract Tool
+
+Modified to work with the 2018 schedule
+Original codebase  - https://github.com/mda590/reinvent_schedule_extract
+
+-------------------------------------
 
 This tool is meant to make it super easy to export your re:invent schedule into a text file and then import it into whatever tool makes it easier for you to work with.
 
