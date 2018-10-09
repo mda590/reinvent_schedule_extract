@@ -67,6 +67,7 @@ def get_session_time(session_id):
         "c0-methodName": "getSchedulingJSON",
         "c0-id": 0,
         "c0-param0": "number:" + session_id,
+        "c0-param1": "false",
         "batchId": 5,
         "instanceId": 0,
         "page": "%2Fconnect%2Fsearch.ww",
