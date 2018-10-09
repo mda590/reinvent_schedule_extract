@@ -20,8 +20,8 @@ from time import sleep
 from bs4 import BeautifulSoup
 import re
 
-#Venetian, Encore, Aria, MGM, Mirage, LINQ
-VENUE_CODES = [22188,728,22191,22190,22583,22584]
+#Venetian, Encore, Aria, MGM, Mirage, BELLAGIO, VDARA
+VENUE_CODES = [22188,728,22191,22190,22583,22584,24372]
 # Set username and password for reinvent event website
 USERNAME = 'USERNAME'
 PASSWORD = 'PASSWORD'
