@@ -45,6 +45,8 @@ def login(chrome_driver, username, password):
     Utilizes headless chrome, passing in username and password
     '''
     chrome_driver.get("https://www.portal.reinvent.awsevents.com/connect/login.ww")
+    cookie_button = chrome_driver.find_element_by_id("cookieAgreementAcceptButton")
+    cookie_button.click()
     username_field = chrome_driver.find_element_by_id("loginUsername")
     username_field.send_keys(username)
     password_field = chrome_driver.find_element_by_id("loginPassword")
