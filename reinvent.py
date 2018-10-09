@@ -109,6 +109,7 @@ for venue in VENUE_CODES:
     while(more_results):
         try:
             # Find the Get More Results link and click it to load next sessions
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             get_results_btn = driver.find_element_by_link_text("Get More Results")
             get_results_btn.click()
             sleep(3)
