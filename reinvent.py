@@ -20,8 +20,8 @@ from time import sleep
 from bs4 import BeautifulSoup
 import re
 
-#Venetian, Encore, Aria, MGM, Mirage, LINQ
-VENUE_CODES = [22188,728,22191,22190,22583,22584]
+#Venetian, Encore, Aria, MGM, Mirage, BELLAGIO, VDARA
+VENUE_CODES = [22188,728,22191,22190,22583,22584,24372]
 # Set username and password for reinvent event website
 USERNAME = 'USERNAME'
 PASSWORD = 'PASSWORD'
@@ -45,6 +45,8 @@ def login(chrome_driver, username, password):
     Utilizes headless chrome, passing in username and password
     '''
     chrome_driver.get("https://www.portal.reinvent.awsevents.com/connect/login.ww")
+    cookie_button = chrome_driver.find_element_by_id("cookieAgreementAcceptButton")
+    cookie_button.click()
     username_field = chrome_driver.find_element_by_id("loginUsername")
     username_field.send_keys(username)
     password_field = chrome_driver.find_element_by_id("loginPassword")
@@ -65,6 +67,7 @@ def get_session_time(session_id):
         "c0-methodName": "getSchedulingJSON",
         "c0-id": 0,
         "c0-param0": "number:" + session_id,
+        "c0-param1": "false",
         "batchId": 5,
         "instanceId": 0,
         "page": "%2Fconnect%2Fsearch.ww",
@@ -106,6 +109,7 @@ for venue in VENUE_CODES:
     while(more_results):
         try:
             # Find the Get More Results link and click it to load next sessions
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             get_results_btn = driver.find_element_by_link_text("Get More Results")
             get_results_btn.click()
             sleep(3)
