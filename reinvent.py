@@ -21,7 +21,14 @@ from bs4 import BeautifulSoup
 import re
 
 #Venetian, Encore, Aria, MGM, Mirage, BELLAGIO, VDARA
-VENUE_CODES = [22188,728,22191,22190,22583,22584,24372]
+VENUE_CODES = [
+    33659,
+    33660,
+    728,
+    33661,
+    33662,
+    33663,
+]
 # Set username and password for reinvent event website
 USERNAME = 'USERNAME'
 PASSWORD = 'PASSWORD'
@@ -75,13 +82,28 @@ def get_session_time(session_id):
     }
     headers = {'Content-Type': 'text/plain'}
     r = requests.post(url, headers=headers, data=data, verify=REQ_VERIFY)
-    returned = r.content
+    returned = r.content.decode('utf8')
     returned = returned.replace("\\", '')
 
     # Returns in XHR format. Strip out the relevant information.
-    start_time = re.search(r"startTime\":(\".*?\")", returned, re.DOTALL | re.MULTILINE).group(1)
-    end_time = re.search(r"endTime\":(\".*?\")", returned, re.DOTALL | re.MULTILINE).group(1)
-    room = re.search(r"room\":(\".*?\")", returned, re.DOTALL | re.MULTILINE).group(1)
+    m = re.search(r"startTime\":(\".*?\")", returned, re.DOTALL | re.MULTILINE)
+    if m:
+        start_time = m.group(1)
+    else:
+        start_time = ""
+        print (returned)
+    m = re.search(r"endTime\":(\".*?\")", returned, re.DOTALL | re.MULTILINE)
+    if m:
+        end_time = m.group(1)
+    else:
+        end_time = ""
+        print (returned)
+    m = re.search(r"room\":(\".*?\")", returned, re.DOTALL | re.MULTILINE)
+    if m:
+        room = m.group(1)
+    else:
+        room = ""
+        print (returned)
 
     time_information = {
         "start_time": start_time.replace('"', ''),
@@ -164,7 +186,7 @@ for session in sessions:
         session_interest = True
 
     write_contents = str(session_number) + "|" + session_title + "|" + str(session_interest) + "|" + str(session_timing['start_time']) + "|" + str(session_timing['end_time']) + "|" + str(session_timing['room'] + "|" + str(session_timing['day']))
-    file.write(write_contents.encode('utf-8').strip() + "\n")
+    file.write(write_contents.strip() + "\n")
     # Print the session title for each session written to the file
     print (session_title.encode('utf-8').strip())
 
