@@ -1,5 +1,8 @@
 # AWS re:Invent 2018 Schedule Extract Tool
 
+### 2019 Note
+This tool, while still functional, is not as updated as the code available in the https://github.com/mda590/reinvent_bot repo. The new repo contains the code which runs the Twitter bot (@reinvent_bot) while also providing the ability to export sessions, similar to what this tool does.
+
 This tool is meant to make it super easy to export your re:invent schedule into a text file and then import it into whatever tool makes it easier for you to work with.
 
 This tool is given without warranty and probably little maintenance. I whipped it up over the weekend to try to solve my problems (explained below) and thought I would share.
